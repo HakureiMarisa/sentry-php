@@ -23,14 +23,15 @@ function cmd_test($dsn)
 {
     // Parse DSN as a test
     try {
-        if (empty(Raven_Client::parseDSN($dsn))) {
+        $parsed = Raven_Client::parseDSN($dsn);
+        if (empty($parsed)) {
             exit('ERROR: Missing DSN value');
         }
     } catch (InvalidArgumentException $ex) {
         exit("ERROR: There was an error parsing your DSN:\n  " . $ex->getMessage());
     }
 
-    $client = new Raven_Client($dsn, array(
+    $client = new Raven_Client($parsed, array(
         'trace' => true,
         'curl_method' => 'sync',
         'app_path' => realpath(__DIR__ . '/..'),
